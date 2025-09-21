@@ -5,6 +5,7 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { AdminPage } from '@/pages/AdminPage';
 import { RobotDatabasePage } from '@/pages/RobotDatabasePage';
+import { RobotDetailsPage } from '@/pages/RobotDetailsPage';
 import { IndustryNewsPage } from '@/pages/IndustryNewsPage';
 import LandingPage from '@/components/LandingPage';
 
@@ -22,6 +23,7 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/robots" element={<RobotDatabasePage />} />
+              <Route path="/robot/:slug" element={<RobotDetailsPage />} />
               <Route path="/news" element={<IndustryNewsPage />} />
               <Route 
                 path="/admin" 
