@@ -65,9 +65,10 @@ As a [user type], I want [functionality] so that [benefit]
 - API endpoint modifications
 
 ### Database Changes
-- New tables/columns
-- Indexes to add
-- RLS policies to update
+- New tables/columns (create migration files in `supabase/migrations/`)
+- Indexes to add (include in migration files)
+- RLS policies to update (include in migration files)
+- Migration file naming: `00X_descriptive_name.sql`
 
 ## Acceptance Criteria
 - [ ] Criterion 1
@@ -149,6 +150,8 @@ Any important implementation notes or lessons learned
 - [ ] Task aligns with PRD requirements
 - [ ] Technical approach is feasible
 - [ ] Database changes are optimized
+- [ ] Migration files are placed in `supabase/migrations/`
+- [ ] Migration files follow naming convention
 - [ ] No conflicts with existing implementations
 - [ ] Dependencies are identified
 

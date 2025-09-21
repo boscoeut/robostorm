@@ -514,15 +514,55 @@ END;
 $$ LANGUAGE plpgsql;
 ```
 
-### 9. Data Migration Strategy
+### 9. Database Migrations and Data Migration Strategy
 
-#### 9.1 Initial Data Import
+#### 9.1 Migration File Location
+**IMPORTANT**: All database migration files must be placed in the `supabase/migrations/` directory.
+
+```
+supabase/
+├── migrations/                   # ALL database migration files go here
+│   ├── 001_create_user_roles.sql
+│   ├── 002_create_manufacturers.sql
+│   ├── 003_create_robots.sql
+│   ├── 004_create_categories.sql
+│   ├── 005_create_specifications.sql
+│   ├── 006_create_media.sql
+│   ├── 007_create_reviews.sql
+│   ├── 008_create_search_indexes.sql
+│   └── ...
+```
+
+#### 9.2 Migration Best Practices
+- **Sequential numbering**: Use `001_`, `002_`, `003_` format for proper ordering
+- **Descriptive names**: Use clear, descriptive names like `create_robots_table`
+- **One purpose per migration**: Each migration should handle one logical change
+- **Include rollback notes**: Comment how to undo changes if needed
+- **Use IF NOT EXISTS**: Prevent errors on re-runs
+- **Test thoroughly**: Always test migrations on development environment first
+
+#### 9.3 Migration Workflow
+```bash
+# Create new migration
+supabase migration new create_robots_table
+
+# Apply migrations
+supabase db push
+
+# Reset database (development only)
+supabase db reset
+
+# Check migration status
+supabase migration list
+```
+
+#### 9.4 Initial Data Import
 - **Manufacturers**: Import from robotics industry databases
 - **Categories**: Define standard robot categories
 - **Robots**: Import from manufacturer websites and robotics publications
 - **Specifications**: Parse and import technical specifications
 
-#### 9.2 Data Validation
+#### 9.5 Data Validation
 ```sql
 -- Data validation functions
 CREATE OR REPLACE FUNCTION validate_robot_data()

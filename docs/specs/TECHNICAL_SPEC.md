@@ -80,7 +80,7 @@ robostorm/
 │   │       │   ├── reviews.ts        # Review management
 │   │       │   └── recommendations.ts # AI recommendations
 │   │       └── index.ts             # MCP server entry point
-│   ├── migrations/              # Database migrations
+│   ├── migrations/              # Database migrations (ALL migration files go here)
 │   └── seed/                    # Seed data
 └── docs/                        # Documentation
     └── specs/                   # Project specifications
@@ -321,9 +321,48 @@ interface MCPTool {
 - Database operations are centralized through a shared Supabase client
 - Authentication and authorization are handled at the server level
 
-### 10. Development Workflow
+### 10. Database Migrations
 
-#### 10.1 Local Development
+#### 10.1 Migration File Location
+**IMPORTANT**: All database migration files must be placed in the `supabase/migrations/` directory.
+
+```
+supabase/
+├── migrations/                   # ALL database migration files go here
+│   ├── 001_create_user_roles.sql
+│   ├── 002_create_robots_table.sql
+│   ├── 003_add_search_indexes.sql
+│   └── ...
+```
+
+#### 10.2 Migration Naming Convention
+- Use sequential numbering: `001_`, `002_`, `003_`, etc.
+- Use descriptive names: `create_user_roles`, `add_search_indexes`
+- Use snake_case for file names
+- Always include the `.sql` extension
+
+#### 10.3 Migration Best Practices
+- **One migration per logical change**: Don't combine unrelated schema changes
+- **Include rollback instructions**: Comment how to undo the migration if needed
+- **Test migrations**: Always test on development environment first
+- **Use IF NOT EXISTS**: Prevent errors if migration runs multiple times
+- **Document dependencies**: Note which migrations depend on others
+
+#### 10.4 Running Migrations
+```bash
+# Apply all pending migrations
+supabase db push
+
+# Apply specific migration (development)
+supabase db reset --with-data
+
+# Check migration status
+supabase migration list
+```
+
+### 11. Development Workflow
+
+#### 11.1 Local Development
 ```bash
 # Frontend development
 cd web
@@ -352,42 +391,42 @@ npm run dev
 3. **Production**: Manual approval for production deployment
 4. **Monitoring**: Real-time monitoring and error tracking
 
-### 11. Monitoring & Analytics
+### 12. Monitoring & Analytics
 
-#### 11.1 Application Monitoring
+#### 12.1 Application Monitoring
 - **Error Tracking**: Real-time error monitoring and alerting
 - **Performance Monitoring**: Core Web Vitals tracking
 - **User Analytics**: User behavior and engagement tracking
 - **System Metrics**: Server performance and resource usage
 
-#### 11.2 Business Metrics
+#### 12.2 Business Metrics
 - **User Engagement**: Page views, session duration, bounce rate
 - **Content Metrics**: Robot views, search queries, favorites
 - **Conversion Metrics**: Registration rate, user retention
 - **Performance Metrics**: Page load times, API response times
 
-### 12. Scalability Considerations
+### 13. Scalability Considerations
 
-#### 12.1 Horizontal Scaling
+#### 13.1 Horizontal Scaling
 - **Stateless Architecture**: No server-side sessions
 - **Database Sharding**: Horizontal database scaling
 - **CDN Distribution**: Global content delivery
 - **Microservices**: Modular backend services
 
-#### 12.2 Performance Scaling
+#### 13.2 Performance Scaling
 - **Database Optimization**: Query optimization and indexing
 - **Caching Layers**: Multiple caching strategies
 - **Load Balancing**: Traffic distribution across servers
 - **Auto-scaling**: Automatic resource scaling based on demand
 
-### 13. Future Technical Considerations
+### 14. Future Technical Considerations
 
-#### 13.1 Mobile Application
+#### 14.1 Mobile Application
 - **React Native**: Cross-platform mobile development
 - **Shared Codebase**: Reuse of business logic and API layer
 - **Offline Support**: Local data caching and synchronization
 
-#### 13.2 Advanced Features
+#### 14.2 Advanced Features
 - **Real-time Updates**: WebSocket connections for live data
 - **AI Integration**: Machine learning for recommendations
 - **AR/VR Support**: 3D robot visualization
