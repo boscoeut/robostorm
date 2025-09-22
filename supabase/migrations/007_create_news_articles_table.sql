@@ -184,3 +184,4 @@ CREATE POLICY "Allow authenticated users to update news articles" ON news_articl
 -- Allow authenticated users to delete news articles
 CREATE POLICY "Allow authenticated users to delete news articles" ON news_articles
     FOR DELETE USING (auth.role() = 'authenticated');
+
