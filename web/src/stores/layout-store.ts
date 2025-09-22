@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { LayoutState, LayoutActions, NavigationItem } from '@/types/layout';
+import { BarChart3, Upload, Bot, Users, Settings } from 'lucide-react';
 
 const allNavigationItems: NavigationItem[] = [
   {
@@ -26,12 +27,45 @@ const allNavigationItems: NavigationItem[] = [
     href: '/admin',
     public: false,
     adminOnly: true,
+    children: [
+      {
+        id: 'admin-dashboard',
+        label: 'Dashboard',
+        href: '/admin',
+        icon: BarChart3,
+      },
+      {
+        id: 'admin-media',
+        label: 'Media Management',
+        href: '/admin?section=media',
+        icon: Upload,
+      },
+      {
+        id: 'admin-robots',
+        label: 'Robot Management',
+        href: '/admin?section=robots',
+        icon: Bot,
+      },
+      {
+        id: 'admin-users',
+        label: 'User Management',
+        href: '/admin?section=users',
+        icon: Users,
+      },
+      {
+        id: 'admin-settings',
+        label: 'Settings',
+        href: '/admin?section=settings',
+        icon: Settings,
+      },
+    ],
   },
 ];
 
 export const useLayoutStore = create<LayoutState & LayoutActions>((set) => ({
   // State
   sidebarOpen: false,
+  desktopSidebarVisible: true, // Desktop sidebar starts visible
   currentRoute: '/',
   navigationItems: allNavigationItems.filter(item => item.public),
 
@@ -39,6 +73,10 @@ export const useLayoutStore = create<LayoutState & LayoutActions>((set) => ({
   toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
   
   setSidebarOpen: (open: boolean) => set({ sidebarOpen: open }),
+  
+  toggleDesktopSidebar: () => set((state) => ({ desktopSidebarVisible: !state.desktopSidebarVisible })),
+  
+  setDesktopSidebarVisible: (visible: boolean) => set({ desktopSidebarVisible: visible }),
   
   setCurrentRoute: (route: string) => set({ currentRoute: route }),
   

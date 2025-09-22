@@ -92,6 +92,7 @@ robostorm/
 - **Atomic Design**: Components organized by complexity (atoms, molecules, organisms)
 - **Compound Components**: Complex UI patterns using compound component pattern
 - **Custom Hooks**: Reusable logic extraction for state and side effects
+- **Media Components**: Specialized components for image/video upload and gallery display
 
 #### 4.2 State Management Strategy
 ```typescript
@@ -293,7 +294,7 @@ The application uses a single Model Context Protocol (MCP) server edge function 
 - **analytics**: Track user behavior and system metrics
 - **import**: Bulk data import from external sources
 - **user-management**: User profile and preference management
-- **media-handling**: Image and file upload processing
+- **media-handling**: Admin-only image and video upload processing with Supabase Storage
 - **reviews**: Review and rating management
 - **recommendations**: AI-powered robot recommendations
 

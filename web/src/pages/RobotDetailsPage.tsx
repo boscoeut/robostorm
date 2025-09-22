@@ -4,8 +4,9 @@ import { ArrowLeft, Bot, ExternalLink, Star, Eye, Heart, Share2, Calendar, Build
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+import { MediaGallery } from '@/components/robot/media/MediaGallery';
 import { supabase } from '@/lib/supabase';
+import type { RobotMedia } from '@/types/database';
 
 interface Robot {
   id: string;
@@ -61,6 +62,7 @@ export const RobotDetailsPage: React.FC = () => {
   const navigate = useNavigate();
   const [robot, setRobot] = useState<Robot | null>(null);
   const [specifications, setSpecifications] = useState<RobotSpecification[]>([]);
+  const [media, setMedia] = useState<RobotMedia[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
@@ -113,6 +115,19 @@ export const RobotDetailsPage: React.FC = () => {
 
       if (!specsError && specsData) {
         setSpecifications(specsData);
+      }
+
+      // Fetch media
+      const { data: mediaData, error: mediaError } = await supabase
+        .from('robot_media')
+        .select('*')
+        .eq('robot_id', robotData.id)
+        .order('is_primary', { ascending: false })
+        .order('sort_order', { ascending: true })
+        .order('created_at', { ascending: false });
+
+      if (!mediaError && mediaData) {
+        setMedia(mediaData);
       }
 
       // Update view count
@@ -242,18 +257,24 @@ export const RobotDetailsPage: React.FC = () => {
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="w-full md:w-1/3">
                   <div className="aspect-square bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
-                    {robot.featured_image_url ? (
-                      <img 
-                        src={robot.featured_image_url} 
-                        alt={robot.name}
-                        className="w-full h-full object-cover rounded-lg"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = 'none';
-                          (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
-                        }}
-                      />
-                    ) : null}
-                    <div className={robot.featured_image_url ? 'hidden' : ''}>
+                    {(() => {
+                      // Use primary image from media if available, otherwise fall back to featured_image_url
+                      const primaryImage = media.find(m => m.is_primary && m.file_type === 'image');
+                      const imageUrl = primaryImage?.file_url || robot.featured_image_url;
+                      
+                      return imageUrl ? (
+                        <img 
+                          src={imageUrl} 
+                          alt={robot.name}
+                          className="w-full h-full object-cover rounded-lg"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none';
+                            (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                          }}
+                        />
+                      ) : null;
+                    })()}
+                    <div className={robot.featured_image_url || media.some(m => m.is_primary) ? 'hidden' : ''}>
                       <Bot className="h-24 w-24 text-gray-400" />
                     </div>
                   </div>
@@ -470,17 +491,11 @@ export const RobotDetailsPage: React.FC = () => {
           )}
 
           {activeTab === 'media' && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Media Gallery</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                  <Bot className="h-16 w-16 mx-auto mb-4 opacity-50" />
-                  <p>Media gallery coming soon</p>
-                </div>
-              </CardContent>
-            </Card>
+            <MediaGallery
+              media={media}
+              robotName={robot.name}
+              className="mb-6"
+            />
           )}
         </div>
 

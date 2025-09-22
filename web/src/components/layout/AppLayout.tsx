@@ -8,7 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useEffect } from 'react';
 
 export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
-  const { sidebarOpen, toggleSidebar, setSidebarOpen, updateNavigationForAuth } = useLayoutStore();
+  const { sidebarOpen, desktopSidebarVisible, toggleSidebar, setSidebarOpen, updateNavigationForAuth } = useLayoutStore();
   const { user, isAdmin, loading } = useAuth();
 
   // Update navigation when authentication state changes

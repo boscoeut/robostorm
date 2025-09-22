@@ -196,34 +196,61 @@ CREATE TABLE specifications (
 - `idx_specifications_category` on `category`
 - `idx_specifications_name` on `name`
 
-#### 3.6 media
-Stores images, videos, and documents related to robots.
+#### 3.6 robot_media
+Stores images, videos, and documents related to robots with comprehensive metadata and admin-only upload controls.
 
 ```sql
-CREATE TABLE media (
+CREATE TABLE robot_media (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     robot_id UUID NOT NULL REFERENCES robots(id) ON DELETE CASCADE,
-    file_type VARCHAR(50) NOT NULL, -- image, video, document, 3d_model
+    file_type VARCHAR(50) NOT NULL, -- image, video, document, 3d_model, datasheet
     file_name VARCHAR(255) NOT NULL,
     file_url VARCHAR(500) NOT NULL,
+    thumbnail_url VARCHAR(500),
     file_size_bytes BIGINT,
     mime_type VARCHAR(100),
+    
+    -- Image/Video specific
     width INTEGER,
     height INTEGER,
     duration_seconds INTEGER, -- for videos
+    
+    -- Metadata
+    title VARCHAR(255),
     alt_text TEXT,
     caption TEXT,
+    description TEXT,
+    tags TEXT[],
+    
+    -- Organization
     sort_order INTEGER DEFAULT 0,
     is_primary BOOLEAN DEFAULT false,
+    is_featured BOOLEAN DEFAULT false,
+    
+    -- Rights and Attribution
+    copyright_info TEXT,
+    license_type VARCHAR(100),
+    source_url VARCHAR(500),
+    attribution TEXT,
+    
+    -- Timestamps
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     created_by UUID REFERENCES auth.users(id)
 );
 ```
 
 **Indexes:**
-- `idx_media_robot` on `robot_id`
-- `idx_media_type` on `file_type`
-- `idx_media_primary` on `is_primary`
+- `idx_robot_media_robot` on `robot_id`
+- `idx_robot_media_type` on `file_type`
+- `idx_robot_media_primary` on `is_primary`
+- `idx_robot_media_featured` on `is_featured`
+
+**Storage Integration:**
+- Files stored in Supabase Storage `robot-media` bucket
+- Organized folder structure: `robots/{robot_id}/media/`
+- Admin-only upload policies with public read access
+- Automatic thumbnail generation and image optimization
 
 #### 3.7 reviews
 User-generated reviews and ratings for robots.

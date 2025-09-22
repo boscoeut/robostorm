@@ -10,6 +10,7 @@ export interface NavigationItem {
 
 export interface LayoutState {
   sidebarOpen: boolean;
+  desktopSidebarVisible: boolean;
   currentRoute: string;
   navigationItems: NavigationItem[];
 }
@@ -17,6 +18,8 @@ export interface LayoutState {
 export interface LayoutActions {
   toggleSidebar: () => void;
   setSidebarOpen: (open: boolean) => void;
+  toggleDesktopSidebar: () => void;
+  setDesktopSidebarVisible: (visible: boolean) => void;
   setCurrentRoute: (route: string) => void;
   setNavigationItems: (items: NavigationItem[]) => void;
   updateNavigationForAuth: (isAuthenticated: boolean, isAdmin: boolean) => void;

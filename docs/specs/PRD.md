@@ -64,7 +64,8 @@ Currently, there is no centralized, comprehensive database for humanoid robots. 
 
 #### 6.3 Content Management
 - **Robot Information**: Name, manufacturer, release date, specifications
-- **Media Gallery**: High-quality photos, videos, and 3D models
+- **Media Gallery**: High-quality photos, videos, and 3D models with admin upload management
+- **Profile Images**: Admin-selected primary images for robot identification
 - **Technical Details**: Dimensions, sensors, actuators, software, AI capabilities
 - **Reviews & Ratings**: User-generated content and expert reviews
 
