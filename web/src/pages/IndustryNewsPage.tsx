@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Newspaper, Clock, TrendingUp, ExternalLink, Calendar, Loader2, RefreshCw } from 'lucide-react';
+import { Newspaper, Clock, TrendingUp, ExternalLink, Calendar, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -13,7 +13,6 @@ export const IndustryNewsPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
-  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     loadNewsData();
@@ -42,23 +41,6 @@ export const IndustryNewsPage: React.FC = () => {
     }
   };
 
-  const refreshNewsFromRundown = async () => {
-    try {
-      setRefreshing(true);
-      setError(null);
-
-      // Fetch fresh news from The Rundown Robotics
-      await NewsService.fetchFromRundownRobotics();
-
-      // Reload the news data
-      await loadNewsData();
-    } catch (err) {
-      console.error('Error refreshing news from Rundown Robotics:', err);
-      setError('Failed to refresh news from The Rundown Robotics. Please try again later.');
-    } finally {
-      setRefreshing(false);
-    }
-  };
 
   const handleCategoryClick = async (category: string) => {
     if (category === selectedCategory) {
@@ -137,16 +119,6 @@ export const IndustryNewsPage: React.FC = () => {
           <Badge variant="outline" className="px-3 py-1">
             Powered by The Rundown Robotics
           </Badge>
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={refreshNewsFromRundown}
-            disabled={refreshing}
-            className="flex items-center gap-2"
-          >
-            <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-            {refreshing ? 'Refreshing...' : 'Refresh News'}
-          </Button>
         </div>
       </div>
 

@@ -6,13 +6,23 @@ import { ThemeSwitcher } from '@/components/ui/theme-switcher';
 import { AuthButton } from '@/components/auth/AuthButton';
 import { Menu, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
-export const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
-  const { navigationItems, sidebarOpen } = useLayoutStore();
+export const Header: React.FC<HeaderProps> = () => {
+  const { navigationItems } = useLayoutStore();
   const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleTitleClick = () => {
     navigate('/');
+  };
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
   };
 
   return (
@@ -59,11 +69,11 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={onMenuToggle}
+                onClick={toggleMobileMenu}
                 className="p-2"
-                aria-label={sidebarOpen ? 'Close menu' : 'Open menu'}
+                aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
               >
-                {sidebarOpen ? (
+                {mobileMenuOpen ? (
                   <X className="h-5 w-5" />
                 ) : (
                   <Menu className="h-5 w-5" />
@@ -72,6 +82,32 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
             </div>
           </div>
         </div>
+
+        {/* Mobile Navigation Menu */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+            <div className="px-2 pt-2 pb-3 space-y-1">
+              {/* Mobile Theme Switcher and Auth Button */}
+              <div className="flex items-center justify-between px-3 py-2 border-b border-gray-200 dark:border-gray-700 mb-2">
+                <div className="flex items-center gap-3">
+                  <ThemeSwitcher />
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Theme
+                  </span>
+                </div>
+                <AuthButton variant="mobile" />
+              </div>
+              
+              {/* Mobile Navigation Items */}
+              <Navigation 
+                items={navigationItems} 
+                variant="vertical"
+                onItemClick={closeMobileMenu}
+                className="px-1"
+              />
+            </div>
+          </div>
+        )}
       </div>
     </header>
   );

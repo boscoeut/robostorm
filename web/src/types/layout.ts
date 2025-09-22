@@ -9,17 +9,11 @@ export interface NavigationItem {
 }
 
 export interface LayoutState {
-  sidebarOpen: boolean;
-  desktopSidebarVisible: boolean;
   currentRoute: string;
   navigationItems: NavigationItem[];
 }
 
 export interface LayoutActions {
-  toggleSidebar: () => void;
-  setSidebarOpen: (open: boolean) => void;
-  toggleDesktopSidebar: () => void;
-  setDesktopSidebarVisible: (visible: boolean) => void;
   setCurrentRoute: (route: string) => void;
   setNavigationItems: (items: NavigationItem[]) => void;
   updateNavigationForAuth: (isAuthenticated: boolean, isAdmin: boolean) => void;
@@ -29,9 +23,7 @@ export interface AppLayoutProps {
   children: React.ReactNode;
 }
 
-export interface HeaderProps {
-  onMenuToggle: () => void;
-}
+export interface HeaderProps {}
 
 export interface SidebarProps {
   isOpen: boolean;

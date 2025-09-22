@@ -118,26 +118,6 @@ export const RobotComparisonLayout: React.FC<RobotComparisonLayoutProps> = ({
         />
       </div>
 
-      {/* Call to Action */}
-      <div className="text-center space-y-4">
-        <div className="bg-gray-50 rounded-lg p-6 max-w-2xl mx-auto">
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">
-            Want to compare more robots?
-          </h3>
-          <p className="text-gray-600 mb-4">
-            Use our advanced comparison tool to compare up to 5 robots 
-            with detailed specifications and side-by-side analysis.
-          </p>
-          <Button 
-            onClick={handleCompareMore}
-            size="lg"
-            className="flex items-center gap-2"
-          >
-            Advanced Comparison Tool
-            <ArrowRight className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
     </div>
   );
 };

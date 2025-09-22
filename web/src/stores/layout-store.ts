@@ -64,20 +64,10 @@ const allNavigationItems: NavigationItem[] = [
 
 export const useLayoutStore = create<LayoutState & LayoutActions>((set) => ({
   // State
-  sidebarOpen: false,
-  desktopSidebarVisible: true, // Desktop sidebar starts visible
   currentRoute: '/',
   navigationItems: allNavigationItems.filter(item => item.public),
 
   // Actions
-  toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
-  
-  setSidebarOpen: (open: boolean) => set({ sidebarOpen: open }),
-  
-  toggleDesktopSidebar: () => set((state) => ({ desktopSidebarVisible: !state.desktopSidebarVisible })),
-  
-  setDesktopSidebarVisible: (visible: boolean) => set({ desktopSidebarVisible: visible }),
-  
   setCurrentRoute: (route: string) => set({ currentRoute: route }),
   
   setNavigationItems: (items: NavigationItem[]) => set({ navigationItems: items }),

@@ -194,15 +194,8 @@ export class NewsService {
       });
 
       if (error) {
-        // If the RPC doesn't exist, use a regular update
-        const { error: updateError } = await supabase
-          .from('news_articles')
-          .update({ view_count: supabase.raw('view_count + 1') })
-          .eq('id', articleId);
-
-        if (updateError) {
-          throw updateError;
-        }
+        // If the RPC doesn't exist, skip the update
+        console.warn('RPC increment_news_view_count not available, skipping view count increment');
       }
     } catch (error) {
       console.error('Error incrementing view count:', error);
@@ -210,38 +203,6 @@ export class NewsService {
     }
   }
 
-  /**
-   * Fetch news articles from The Rundown Robotics
-   * This method calls the edge function to fetch fresh news from The Rundown Robotics
-   */
-  static async fetchFromRundownRobotics(): Promise<NewsArticle[]> {
-    try {
-      // Call the edge function to fetch fresh news
-      const { data, error } = await supabase.functions.invoke('fetch-rundown-news', {
-        method: 'POST'
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      // After fetching, get the updated articles from the database
-      const { data: articles, error: fetchError } = await supabase
-        .from('news_articles')
-        .select('*')
-        .eq('source_name', 'The Rundown Robotics')
-        .order('published_date', { ascending: false });
-
-      if (fetchError) {
-        throw fetchError;
-      }
-
-      return articles || [];
-    } catch (error) {
-      console.error('Error fetching from Rundown Robotics:', error);
-      throw error;
-    }
-  }
 
   /**
    * Add a new news article to the database

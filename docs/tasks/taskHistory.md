@@ -1,5 +1,73 @@
 # Task History
 
+## [2025-01-27] - Remove News Refresh Functionality
+**Status**: Completed
+**Phase**: 1
+**Priority**: Medium
+
+### Summary
+Removed the news refresh functionality from the Industry News page and the corresponding edge function. This simplifies the application by removing the ability to manually refresh news from The Rundown Robotics, making the news display static and reducing complexity.
+
+### Key Changes
+- Frontend: Removed refresh button and related state from IndustryNewsPage.tsx
+- Frontend: Removed RefreshCw icon import and refreshing state management
+- Backend: Removed fetchFromRundownRobotics() method from NewsService
+- Backend: Deleted fetch-rundown-news edge function entirely
+- Database: No changes required (existing news data remains)
+
+### Deliverables
+- **Simplified Industry News Page**: Removed refresh button and related functionality
+  - Removed RefreshCw icon import
+  - Removed refreshing state variable
+  - Removed refreshNewsFromRundown() function
+  - Cleaned up header section to show only "Powered by The Rundown Robotics" badge
+- **Updated News Service**: Removed refresh-related methods
+  - Deleted fetchFromRundownRobotics() method
+  - Fixed linting error in incrementViewCount() method
+- **Removed Edge Function**: Completely deleted fetch-rundown-news edge function
+  - Deleted /supabase/functions/fetch-rundown-news/index.ts
+  - Removed entire fetch-rundown-news directory
+
+### Notes
+This change simplifies the application by removing the manual news refresh capability. The Industry News page now displays static news data from the database without the ability to fetch fresh content from The Rundown Robotics. This reduces application complexity and removes the dependency on external news scraping. The existing news data in the database remains intact and continues to be displayed normally.
+
+---
+
+## [2025-01-27] - Remove Side Navigation from UI
+**Status**: Pending
+**Phase**: 1
+**Priority**: High
+
+### Summary
+Created comprehensive task definition for removing the side navigation (sidebar) from the RoboStorm application while maintaining horizontal navigation in the header and ensuring mobile navigation functionality continues to work properly. This will create a cleaner, more focused layout that emphasizes the main content area.
+
+### Key Changes
+- Documentation: Created detailed task definition with 7-hour implementation plan
+- Planning: Defined comprehensive sidebar removal strategy with mobile navigation alternatives
+- Analysis: Identified current navigation structure and proposed clean removal approach
+
+### Deliverables
+- **Task Definition Document**: Complete implementation plan with technical specifications
+  - Frontend component updates to remove sidebar integration
+  - Layout store cleanup to remove sidebar-related state and actions
+  - Mobile navigation solution implementation
+  - Comprehensive testing strategy and acceptance criteria
+- **Implementation Planning**: 
+  - 4-hour development estimate with detailed breakdown
+  - Mobile navigation options (dropdown, modal, or collapsible header)
+  - State management cleanup strategy
+  - Responsive design considerations
+- **Risk Mitigation**: Identified potential issues and mitigation strategies
+  - Navigation confusion prevention
+  - Mobile UX considerations
+  - Admin access preservation
+  - Responsive design validation
+
+### Notes
+This task will simplify the application layout by removing the sidebar component while maintaining all navigation functionality through the header. The implementation includes comprehensive mobile navigation solutions and ensures no functionality is lost. The task focuses on creating a cleaner, more focused user interface that maximizes screen real estate for robot information and comparisons. All acceptance criteria have been defined with clear success metrics and testing requirements.
+
+---
+
 ## [2025-01-27] - Home Page Robot Comparison Implementation
 **Status**: Pending
 **Phase**: 1
