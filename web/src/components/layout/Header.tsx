@@ -27,7 +27,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
                 className="text-left hover:opacity-80 transition-opacity cursor-pointer"
               >
                 <h1 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white truncate">
-                  Robot Data Hub
+                  DataStorm
                 </h1>
                 <p className="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">
                   The IMDB for Humanoid Robots

@@ -209,4 +209,136 @@ export class NewsService {
       // Don't throw here as this is not critical
     }
   }
+
+  /**
+   * Fetch news articles from The Rundown Robotics
+   * This method calls the edge function to fetch fresh news from The Rundown Robotics
+   */
+  static async fetchFromRundownRobotics(): Promise<NewsArticle[]> {
+    try {
+      // Call the edge function to fetch fresh news
+      const { data, error } = await supabase.functions.invoke('fetch-rundown-news', {
+        method: 'POST'
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      // After fetching, get the updated articles from the database
+      const { data: articles, error: fetchError } = await supabase
+        .from('news_articles')
+        .select('*')
+        .eq('source_name', 'The Rundown Robotics')
+        .order('published_date', { ascending: false });
+
+      if (fetchError) {
+        throw fetchError;
+      }
+
+      return articles || [];
+    } catch (error) {
+      console.error('Error fetching from Rundown Robotics:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Add a new news article to the database
+   */
+  static async addNewsArticle(article: Omit<NewsArticle, 'id' | 'created_at' | 'updated_at'>): Promise<NewsArticle> {
+    try {
+      const { data, error } = await supabase
+        .from('news_articles')
+        .insert([article])
+        .select()
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Error adding news article:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Update an existing news article
+   */
+  static async updateNewsArticle(id: string, updates: Partial<NewsArticle>): Promise<NewsArticle> {
+    try {
+      const { data, error } = await supabase
+        .from('news_articles')
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Error updating news article:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Delete a news article
+   */
+  static async deleteNewsArticle(id: string): Promise<void> {
+    try {
+      const { error } = await supabase
+        .from('news_articles')
+        .delete()
+        .eq('id', id);
+
+      if (error) {
+        throw error;
+      }
+    } catch (error) {
+      console.error('Error deleting news article:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get news statistics
+   */
+  static async getNewsStats(): Promise<{
+    totalArticles: number;
+    totalViews: number;
+    featuredCount: number;
+    categoryCount: number;
+  }> {
+    try {
+      const [articlesResult, viewsResult, featuredResult, categoriesResult] = await Promise.all([
+        supabase.from('news_articles').select('id', { count: 'exact', head: true }),
+        supabase.from('news_articles').select('view_count'),
+        supabase.from('news_articles').select('id', { count: 'exact', head: true }).eq('is_featured', true),
+        supabase.from('news_articles').select('category').not('category', 'is', null)
+      ]);
+
+      const totalArticles = articlesResult.count || 0;
+      const totalViews = viewsResult.data?.reduce((sum, article) => sum + (article.view_count || 0), 0) || 0;
+      const featuredCount = featuredResult.count || 0;
+      const uniqueCategories = new Set(categoriesResult.data?.map(item => item.category).filter(Boolean));
+      const categoryCount = uniqueCategories.size;
+
+      return {
+        totalArticles,
+        totalViews,
+        featuredCount,
+        categoryCount
+      };
+    } catch (error) {
+      console.error('Error fetching news stats:', error);
+      throw error;
+    }
+  }
 }

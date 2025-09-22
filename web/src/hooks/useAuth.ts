@@ -55,42 +55,42 @@ export const useUserPreferences = () => {
     }
   }, [user])
 
-  const addFavoriteVehicle = useCallback(async (vehicleId: string) => {
+  const addFavoriteRobot = useCallback(async (robotId: string) => {
     if (!user) return null
     
     setLoading(true)
     setError(null)
     
     try {
-      const { data, error: prefError } = await UserPreferencesService.addFavoriteVehicle(user.id, vehicleId)
+      const { data, error: prefError } = await UserPreferencesService.addFavoriteRobot(user.id, robotId)
       if (prefError) {
         setError(prefError.message)
         return null
       }
       return data
     } catch (err) {
-      setError('Failed to add favorite vehicle')
+      setError('Failed to add favorite robot')
       return null
     } finally {
       setLoading(false)
     }
   }, [user])
 
-  const removeFavoriteVehicle = useCallback(async (vehicleId: string) => {
+  const removeFavoriteRobot = useCallback(async (robotId: string) => {
     if (!user) return null
     
     setLoading(true)
     setError(null)
     
     try {
-      const { data, error: prefError } = await UserPreferencesService.removeFavoriteVehicle(user.id, vehicleId)
+      const { data, error: prefError } = await UserPreferencesService.removeFavoriteRobot(user.id, robotId)
       if (prefError) {
         setError(prefError.message)
         return null
       }
       return data
     } catch (err) {
-      setError('Failed to remove favorite vehicle')
+      setError('Failed to remove favorite robot')
       return null
     } finally {
       setLoading(false)
@@ -100,8 +100,8 @@ export const useUserPreferences = () => {
   return {
     getUserPreferences,
     updateUserPreferences,
-    addFavoriteVehicle,
-    removeFavoriteVehicle,
+    addFavoriteRobot,
+    removeFavoriteRobot,
     loading,
     error,
     clearError: () => setError(null)

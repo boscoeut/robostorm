@@ -255,3 +255,4 @@ COMMENT ON FUNCTION set_robot_profile_image(UUID, UUID) IS 'Sets a specific medi
 COMMENT ON FUNCTION delete_robot_media(UUID) IS 'Deletes robot media record and handles cleanup';
 
 COMMENT ON TABLE storage.buckets IS 'Storage buckets for file uploads - robot-media bucket configured for admin uploads and public reads';
+

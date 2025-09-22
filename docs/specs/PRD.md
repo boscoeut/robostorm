@@ -74,11 +74,13 @@ Currently, there is no centralized, comprehensive database for humanoid robots. 
 - **Favorites**: Save robots to personal collections
 - **Reviews**: Write and read robot reviews
 - **Comparisons**: Side-by-side comparison of multiple robots
+- **Home Page Comparison**: Interactive robot comparison on landing page with random selection
 - **Wishlist**: Track robots of interest
 
 ### 7. User Stories
 
 #### As a Robot Enthusiast
+- I want to see two random robots compared on the home page so I can quickly discover new models
 - I want to search for humanoid robots by specific features so I can find robots that match my interests
 - I want to compare different robots side-by-side so I can make informed decisions
 - I want to save my favorite robots so I can easily access them later

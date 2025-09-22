@@ -11,7 +11,7 @@ export const Footer: React.FC<FooterProps> = () => {
               DataStorm
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Comprehensive Electric Vehicle Data Hub providing technical specifications, 
+              Comprehensive Humanoid Robot Database providing technical specifications, 
               performance data, and industry insights.
             </p>
           </div>
@@ -24,10 +24,10 @@ export const Footer: React.FC<FooterProps> = () => {
             <ul className="space-y-2">
               <li>
                 <a 
-                  href="/vehicles" 
+                  href="/robots" 
                   className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
                 >
-                  Vehicle Database
+                  Robot Database
                 </a>
               </li>
 

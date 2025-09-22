@@ -107,7 +107,7 @@ stores/
 #### 4.3 Routing Strategy
 ```typescript
 // React Router configuration
-/                           # Home page with featured robots
+/                           # Home page with robot comparison
 /search                     # Search and filter robots
 /robot/:id                  # Individual robot detail page
 /compare                    # Robot comparison page
@@ -297,6 +297,7 @@ The application uses a single Model Context Protocol (MCP) server edge function 
 - **media-handling**: Admin-only image and video upload processing with Supabase Storage
 - **reviews**: Review and rating management
 - **recommendations**: AI-powered robot recommendations
+- **comparison**: Robot comparison data and random selection functionality
 
 **MCP Server Structure:**
 ```typescript

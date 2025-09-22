@@ -1,4 +1,4 @@
-// Database type definitions for RoboStorm - Humanoid Robot Database
+// Database type definitions for DataStorm - Humanoid Robot Database
 // These types match the Supabase database schema
 
 export interface Manufacturer {

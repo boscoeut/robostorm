@@ -318,6 +318,28 @@ CREATE TABLE search_queries (
 - `idx_search_queries_text` on `query_text`
 - `idx_search_queries_created` on `created_at`
 
+#### 4.2 comparison_analytics
+Track robot comparison interactions for analytics and recommendations.
+
+```sql
+CREATE TABLE comparison_analytics (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    robot_1_id UUID NOT NULL REFERENCES robots(id),
+    robot_2_id UUID NOT NULL REFERENCES robots(id),
+    user_id UUID REFERENCES auth.users(id),
+    session_id VARCHAR(255),
+    comparison_type VARCHAR(50) DEFAULT 'home_page', -- home_page, full_comparison, random
+    interaction_type VARCHAR(50) NOT NULL, -- view, select, switch, click_compare_more
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+```
+
+**Indexes:**
+- `idx_comparison_analytics_robots` on `(robot_1_id, robot_2_id)`
+- `idx_comparison_analytics_user` on `user_id`
+- `idx_comparison_analytics_type` on `comparison_type`
+- `idx_comparison_analytics_created` on `created_at`
+
 ### 5. Database Functions and Triggers
 
 #### 5.1 Update Timestamps Trigger

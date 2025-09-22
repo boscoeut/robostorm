@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Newspaper, Clock, TrendingUp, ExternalLink, Calendar, Loader2 } from 'lucide-react';
+import { Newspaper, Clock, TrendingUp, ExternalLink, Calendar, Loader2, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -13,6 +13,7 @@ export const IndustryNewsPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     loadNewsData();
@@ -38,6 +39,24 @@ export const IndustryNewsPage: React.FC = () => {
       setError('Failed to load news articles. Please try again later.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const refreshNewsFromRundown = async () => {
+    try {
+      setRefreshing(true);
+      setError(null);
+
+      // Fetch fresh news from The Rundown Robotics
+      await NewsService.fetchFromRundownRobotics();
+
+      // Reload the news data
+      await loadNewsData();
+    } catch (err) {
+      console.error('Error refreshing news from Rundown Robotics:', err);
+      setError('Failed to refresh news from The Rundown Robotics. Please try again later.');
+    } finally {
+      setRefreshing(false);
     }
   };
 
@@ -110,10 +129,25 @@ export const IndustryNewsPage: React.FC = () => {
             Industry News
           </h1>
         </div>
-        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-4">
           Stay updated with the latest developments, breakthroughs, and trends in humanoid robotics. 
           From research announcements to product launches and industry insights.
         </p>
+        <div className="flex items-center justify-center gap-4">
+          <Badge variant="outline" className="px-3 py-1">
+            Powered by The Rundown Robotics
+          </Badge>
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={refreshNewsFromRundown}
+            disabled={refreshing}
+            className="flex items-center gap-2"
+          >
+            <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
+            {refreshing ? 'Refreshing...' : 'Refresh News'}
+          </Button>
+        </div>
       </div>
 
       {/* News Categories */}
@@ -150,16 +184,22 @@ export const IndustryNewsPage: React.FC = () => {
             {featuredArticles.map((article) => (
               <Card key={article.id} className="hover:shadow-lg transition-shadow cursor-pointer">
                 <CardContent className="p-6">
-                  <div className="aspect-video bg-gray-200 dark:bg-gray-700 rounded-lg mb-4 flex items-center justify-center">
+                  <div className="aspect-video bg-gray-200 dark:bg-gray-700 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
                     {article.image_url ? (
                       <img 
                         src={article.image_url} 
                         alt={article.title}
-                        className="w-full h-full object-cover rounded-lg"
+                        className="w-full h-full object-cover rounded-lg hover:scale-105 transition-transform duration-300"
+                        onError={(e) => {
+                          // Fallback to newspaper icon if image fails to load
+                          e.currentTarget.style.display = 'none';
+                          e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                        }}
                       />
-                    ) : (
+                    ) : null}
+                    <div className={`${article.image_url ? 'hidden' : 'flex'} items-center justify-center h-full w-full`}>
                       <Newspaper className="h-16 w-16 text-gray-400" />
-                    )}
+                    </div>
                   </div>
                   <div className="flex items-center gap-2 mb-2">
                     <Badge variant="secondary">{article.category}</Badge>
@@ -211,16 +251,22 @@ export const IndustryNewsPage: React.FC = () => {
             <Card key={article.id} className="hover:shadow-md transition-shadow cursor-pointer">
               <CardContent className="p-6">
                 <div className="flex flex-col md:flex-row md:items-center gap-4">
-                  <div className="w-full md:w-32 h-20 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <div className="w-full md:w-32 h-20 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                     {article.image_url ? (
                       <img 
                         src={article.image_url} 
                         alt={article.title}
-                        className="w-full h-full object-cover rounded-lg"
+                        className="w-full h-full object-cover rounded-lg hover:scale-105 transition-transform duration-300"
+                        onError={(e) => {
+                          // Fallback to newspaper icon if image fails to load
+                          e.currentTarget.style.display = 'none';
+                          e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                        }}
                       />
-                    ) : (
+                    ) : null}
+                    <div className={`${article.image_url ? 'hidden' : 'flex'} items-center justify-center h-full w-full`}>
                       <Newspaper className="h-8 w-8 text-gray-400" />
-                    )}
+                    </div>
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
